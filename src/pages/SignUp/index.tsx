@@ -1,5 +1,13 @@
 import React, { useRef, useCallback } from 'react';
-import { View, Image, KeyboardAvoidingView, Platform, ScrollView, TextInput, Alert } from 'react-native';
+import {
+  View,
+  Image,
+  KeyboardAvoidingView,
+  Platform,
+  ScrollView,
+  TextInput,
+  Alert
+} from 'react-native';
 import * as Yup from 'yup';
 
 import Icon from 'react-native-vector-icons/Feather';
@@ -8,6 +16,7 @@ import { Form } from '@unform/mobile';
 import { FormHandles } from '@unform/core';
 
 import getValidationErrors from '../../utils/getValidationErrors';
+import api from '../../services/api';
 
 import Input from '../../components/Input';
 import Button from '../../components/Button';
@@ -15,7 +24,6 @@ import Button from '../../components/Button';
 import logoImg from '../../assets/logo.png';
 
 import { Container, Title, BackToSignIn, BackToSignInText } from './styles';
-
 
 interface SignUpFormData {
   name: string;
@@ -45,9 +53,14 @@ const SignUp: React.FC = () => {
           abortEarly: false,
         });
 
-        // await api.post('/users', data);
+        await api.post('/users', data);
 
-        // history.push('/');
+        Alert.alert(
+          'Cadastro realizado!',
+          'Você já pode fazer seu logon no GoBarber'
+        );
+
+        navigation.navigate('SignIn');
       } catch (err) {
         if (err instanceof Yup.ValidationError) {
           const errors = getValidationErrors(err);
@@ -55,7 +68,10 @@ const SignUp: React.FC = () => {
           return;
         }
 
-        Alert.alert('Erro no cadastro', 'Ocorreu um erro ao fazer cadastro, tente novamente.');
+        Alert.alert(
+          'Erro no cadastro',
+          'Ocorreu um erro ao fazer cadastro, tente novamente.'
+        );
       }
     },
     [],

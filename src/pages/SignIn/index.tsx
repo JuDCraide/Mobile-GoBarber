@@ -1,5 +1,13 @@
 import React, { useCallback, useRef } from 'react';
-import { View, Image, KeyboardAvoidingView, Platform, ScrollView, TextInput, Alert } from 'react-native';
+import {
+  View,
+  Image,
+  KeyboardAvoidingView,
+  Platform,
+  ScrollView,
+  TextInput,
+  Alert
+} from 'react-native';
 import * as Yup from 'yup';
 
 import Icon from 'react-native-vector-icons/Feather';
@@ -8,6 +16,7 @@ import { Form } from '@unform/mobile';
 import { FormHandles } from '@unform/core';
 
 import getValidationErrors from '../../utils/getValidationErrors';
+import { useAuth } from '../../hooks/auth'
 
 import Input from '../../components/Input';
 import Button from '../../components/Button';
@@ -32,6 +41,7 @@ const SignIn: React.FC = () => {
   const navigation = useNavigation();
   const formRef = useRef<FormHandles>(null);
   const passwordInputRef = useRef<TextInput>(null);
+  const { signIn, user } = useAuth();
 
   const handleSignIn = useCallback(
     async (data: SignInFormData) => {
@@ -48,12 +58,13 @@ const SignIn: React.FC = () => {
           abortEarly: false,
         });
 
-        // await signIn({
-        //   email: data.email,
-        //   password: data.password,
-        // });
+        await signIn({
+          email: data.email,
+          password: data.password,
+        });
 
-        // history.push('/dashboard');
+        console.log(user);
+
       } catch (err) {
         if (err instanceof Yup.ValidationError) {
           const errors = getValidationErrors(err);
