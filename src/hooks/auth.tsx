@@ -2,9 +2,15 @@ import React, { createContext, useCallback, useContext, useState, useEffect } fr
 import AsyncStorage from '@react-native-community/async-storage';
 import api from '../services/api';
 
+interface User {
+  id: string;
+  name: string;
+  avatar_url: string;
+  email: string;
+}
 interface AuthState {
   token: string;
-  user: Record<string, unknown>;
+  user: User;
 }
 
 interface SignInCredentials {
@@ -13,7 +19,7 @@ interface SignInCredentials {
 }
 
 interface AuthContextData {
-  user: Record<string, unknown>;
+  user: User;
   loading: boolean;
   signIn(credential: SignInCredentials): Promise<void>;
   signOut(): void;
