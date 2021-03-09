@@ -141,7 +141,7 @@ export const SectionTitle = styled.Text`
   margin: 0 24px 12px;
 `;
 
-export const Hour = styled(RectButton)<HourProps>`
+export const Hour = styled(RectButton) <HourProps>`
   padding: 12px;
   background: ${(props) => (props.selected ? '#FF9000' : '#3e3b47')};
   border-radius: 10px;
@@ -153,4 +153,19 @@ export const HourText = styled.Text<HourTextProps>`
   color: ${(props) => (props.selected ? '#232129' : '#f4ede8')};
   font-family: 'RobotoSlab-Regular';
   font-size: 18px;
+`;
+
+export const CreateAppointmentButton = styled(RectButton)`
+  height: 50px;
+  background: #ff9000;
+  border-radius: 10px;
+  align-items: center;
+  justify-content: center;
+  margin: 0 24px 24px;
+`;
+
+export const CreateAppointmentButtonText = styled.Text`
+  color: #232129;
+  font-size: 18px;
+  font-family: 'RobotoSlab-Medium';
 `;
