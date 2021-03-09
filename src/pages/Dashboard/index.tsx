@@ -31,7 +31,7 @@ export interface Provider {
 }
 
 const Dashboard: React.FC = () => {
-  const [providers, setProviders] = useState<Provider[]>([])
+  const [providers, setProviders] = useState<Provider[]>([]);
 
   const { signOut, user } = useAuth();
 
@@ -87,6 +87,7 @@ const Dashboard: React.FC = () => {
           </ProviderInfo>
         </ProvidersContainer>
       )}
+      ListFooterComponent={<ProvidersContainer style={{opacity:0}} />}
     />
   </Container>
 };

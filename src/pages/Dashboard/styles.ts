@@ -30,9 +30,7 @@ export const UserName = styled.Text`
   font-family: 'RobotoSlab-Medium';
 `;
 
-export const ProfileButton = styled.TouchableOpacity`
-
-`;
+export const ProfileButton = styled.TouchableOpacity``;
 
 export const UserAvatar = styled.Image`
   width: 56px;
@@ -42,7 +40,6 @@ export const UserAvatar = styled.Image`
 
 export const ProvidersList = styled(FlatList as new () => FlatList<Provider>)`
   padding: 32px 24px 16px;
-
 `;
 
 export const ProvidersListTitle = styled.Text`
