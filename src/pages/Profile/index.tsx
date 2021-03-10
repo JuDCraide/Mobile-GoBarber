@@ -25,15 +25,16 @@ import { Container, BackButton, Title, UserAvatarButton, UserAvatar, } from './s
 interface ProfileFormData {
   name: string;
   email: string;
+  old_password: string;
   password: string;
+  password_confirmation: string;
 }
 
 const Profile: React.FC = () => {
 
-  const { user } = useAuth();
+  const { user, updatedUser } = useAuth();
   const { goBack } = useNavigation();
 
-  const navigation = useNavigation();
   const formRef = useRef<FormHandles>(null);
   const emailInputRef = useRef<TextInput>(null);
   const passwordInputRef = useRef<TextInput>(null);
@@ -49,21 +50,48 @@ const Profile: React.FC = () => {
           email: Yup.string()
             .required('Email obrigatório')
             .email('Digite um email válido'),
-          password: Yup.string().min(6, 'No mínimo 6 dígitos'),
+          old_password: Yup.string().when('password', {
+            is: (val: string) => !!val.length,
+            then: Yup.string().required(
+              'Senha antiga obrigatória para atualizar senha',
+            ),
+            otherwise: Yup.string(),
+          }),
+          password: Yup.string(),
+          password_confirmation: Yup.string()
+            .when('password', {
+              is: (val: string) => !!val.length,
+              then: Yup.string().required('Confirmação obrigatória'),
+              otherwise: Yup.string(),
+            })
+            .oneOf([Yup.ref('password'), null], 'Confirmação incorreta'),
         });
 
         await schema.validate(data, {
           abortEarly: false,
         });
 
-        await api.post('/users', data);
+        const formData = {
+          name: data.name,
+          email: data.email,
+          ...(data.password
+            ? {
+              old_password: data.old_password,
+              password: data.password,
+              password_confirmation: data.password_confirmation,
+            }
+            : {}),
+        };
+
+        const res = await api.put('/profile', formData);
+        updatedUser(res.data);
 
         Alert.alert(
-          'Cadastro realizado!',
-          'Você já pode fazer seu logon no GoBarber'
+          'Perfil Atualizado!',
+          'Seus dados foram atualizados com sucesso',
         );
 
-        navigation.navigate('SignIn');
+        goBack();
       } catch (err) {
         if (err instanceof Yup.ValidationError) {
           const errors = getValidationErrors(err);
@@ -77,7 +105,7 @@ const Profile: React.FC = () => {
         );
       }
     },
-    [],
+    [goBack,updatedUser],
   );
 
   const handleGoBack = useCallback(() => {
@@ -107,7 +135,7 @@ const Profile: React.FC = () => {
             <Title>Meu Perfil</Title>
 
 
-            <Form ref={formRef} onSubmit={handleProfile} style={{ width: '100%' }}>
+            <Form initialData={user} ref={formRef} onSubmit={handleProfile} style={{ width: '100%' }}>
               <Input
                 name="name"
                 icon="user"
