@@ -90,7 +90,7 @@ export const AuthProvider: React.FC = ({ children }) => {
         token: data.token,
         user,
       });
-      await AsyncStorage.removeItem('@GoBarber:user');
+      await AsyncStorage.setItem('@GoBarber:user', JSON.stringify(user));
     },
     [setData, data.token],
   );
