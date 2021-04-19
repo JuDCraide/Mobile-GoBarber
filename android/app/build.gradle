@@ -163,10 +163,18 @@ android {
     buildTypes {
         debug {
             signingConfig signingConfigs.debug
+             buildConfigField "String", "CODEPUSH_KEY", '""'
         }
+        realeseStaging{
+            resValue "string", "CodePushDeploymentKey", '"<STAGING_KEY>"'
+            // Note: It is a good idea to provide matchingFallbacks for the new buildType you create to prevent build issues
+            // Add the following line if not already there
+            matchingFallbacks = ['release']
+        },
         release {
             //Comentar linha abaixo para enviar no App Center e descomentar para testes locais
             //signingConfig signingConfigs.release
+             buildConfigField "String", "CODEPUSH_KEY", '"<PRODUCTION_KEY>"'
             minifyEnabled enableProguardInReleaseBuilds
             proguardFiles getDefaultProguardFile("proguard-android.txt"), "proguard-rules.pro"
         }
